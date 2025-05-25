@@ -1,9 +1,7 @@
-import { initializeApp, getApps } from "firebase/app";
-import { initializeAuth, getReactNativePersistence } from 'firebase/auth';
-import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
-import { getFirestore } from 'firebase/firestore';
-import { getDatabase } from 'firebase/database';
-import { getAuth } from 'firebase/auth';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
+import 'firebase/compat/firestore';
+import 'firebase/compat/database';
 
 const firebaseConfig = {
   apiKey: "AIzaSyBbD4IRdx5K7nVY4lU57u1mdgYpoJucOro",
@@ -16,10 +14,11 @@ const firebaseConfig = {
   databaseURL: "https://prueba-c7272-default-rtdb.firebaseio.com"
 };
 
-const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
 
-export const auth = initializeAuth(app, {
-  persistence: getReactNativePersistence(ReactNativeAsyncStorage),
-});
-export const firestore = getFirestore(app);
-export const realtimeDB = getDatabase(app);
+// Exportar las instancias
+export const auth = firebase.auth();
+export const firestore = firebase.firestore();
+export const realtimeDB = firebase.database();

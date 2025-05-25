@@ -39,7 +39,7 @@ const LoginScreen = () => {
         text2: 'Bienvenido de nuevo',
       });
 
-      // Redirigir después del login (puedes cambiar a tu Home o Dashboard)
+     
       navigation.navigate('Home');
     } catch (error) {
       let errorMessage = 'Ocurrió un error al iniciar sesión.';

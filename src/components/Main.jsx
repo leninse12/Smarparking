@@ -91,7 +91,7 @@ const Main = () => {
           }]}
         >
           <Image source={require('../../assets/Logo.png')} style={styles.logo} />
-          <Text style={styles.appName}>ParkSmart</Text>
+          <Text style={styles.appName}>Smart Parking</Text>
           <Text style={styles.tagline}>Estacionamiento inteligente</Text>
         </Animated.View>
 

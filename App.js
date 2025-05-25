@@ -6,6 +6,7 @@ import Main from "./src/components/Main";
 import LoginScreen from "./src/components/LoginScreen";
 import RegisterScreen from "./src/components/RegisterScreen";
 import HomeScreen from "./src/components/home";
+import ParkReserva from "./src/components/ParkReserva";
 
 const Stack = createNativeStackNavigator();
 
@@ -19,6 +20,7 @@ export default function App() {
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Register" component={RegisterScreen} />
         <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="ParkReserva" component={ParkReserva} />
       </Stack.Navigator>
       <Toast />
     </NavigationContainer>

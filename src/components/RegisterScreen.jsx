@@ -9,7 +9,8 @@ import {
   StatusBar,
   KeyboardAvoidingView,
   Platform,
-  Image
+  Image,
+  ActivityIndicator, 
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
@@ -18,7 +19,7 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth, firestore } from '../../firebaseConfig';
 import Toast from 'react-native-toast-message';
 import { doc, setDoc } from 'firebase/firestore';
-import { getDatabase, ref, set } from 'firebase/database'; // ✅ Importa Realtime Database
+import { getDatabase, ref, set } from 'firebase/database';
 
 import estilos from '../../styles/Registerstyles.js';
 
@@ -29,6 +30,8 @@ const RegisterScreen = () => {
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [loading, setLoading] = useState(false); 
+
   const navigation = useNavigation();
 
   const handleBackPress = () => {
@@ -36,25 +39,28 @@ const RegisterScreen = () => {
   };
 
   const handleRegister = async () => {
+    setLoading(true); 
     try {
-      // ✅ Crear el usuario en Firebase Auth
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // ✅ Guardar en Firestore
-      await setDoc(doc(firestore, 'usuarios', user.uid), {
+     
+      const firestorePromise = setDoc(doc(firestore, 'usuarios', user.uid), {
         nombre: name,
         correo: email,
         creadoEn: new Date(),
       });
 
-      // ✅ Guardar en Realtime Database
+      
       const database = getDatabase();
-      await set(ref(database, 'usuarios/' + user.uid), {
+      const realtimePromise = set(ref(database, 'usuarios/' + user.uid), {
         nombre: name,
         correo: email,
         creadoEn: new Date().toISOString(),
       });
+
+      
+      await Promise.all([firestorePromise, realtimePromise]);
 
       Toast.show({
         type: 'success',
@@ -81,6 +87,8 @@ const RegisterScreen = () => {
         text1: 'Error de registro',
         text2: errorMessage,
       });
+    } finally {
+      setLoading(false); 
     }
   };
 
@@ -157,14 +165,22 @@ const RegisterScreen = () => {
                 </TouchableOpacity>
               </View>
 
-              <TouchableOpacity style={estilos.botonRegistro} onPress={handleRegister}>
+              <TouchableOpacity
+                style={estilos.botonRegistro}
+                onPress={handleRegister}
+                disabled={loading} 
+              >
                 <LinearGradient
                   colors={['#5ADB5A', '#4CAF50', '#3B8C3B']}
                   style={estilos.botonGradiente}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 0 }}
                 >
-                  <Text style={estilos.textoBoton}>REGISTRARSE</Text>
+                  {loading ? (
+                    <ActivityIndicator size="small" color="#fff" />
+                  ) : (
+                    <Text style={estilos.textoBoton}>REGISTRARSE</Text>
+                  )}
                 </LinearGradient>
               </TouchableOpacity>
             </View>
