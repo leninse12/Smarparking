@@ -21,14 +21,14 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.albertodwdw.SmartPar"
+      "package": "SmartPar"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "extra": {
       "eas": {
-        "projectId": "34e74bc0-0a6c-4e5b-a370-410e0ab96668"
+        "projectId": "##668"
       }
     },
     "plugins": [
